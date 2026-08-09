@@ -1,0 +1,26 @@
+{% extends "auth_base.html" %}
+
+{% load tailwind_filters %}
+
+
+
+{% block "content" %}
+
+
+<div class="flex flex-1 justify-center items-center h-[85vh]">
+    <div class="w-4/12 border p-2">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="flex flex-1">
+                <h2 class="text-2xl font-bold mb-3">Create an Account Here</h2>
+            </div>
+            {{form | crispy}}
+            <div class="mb-3">
+                <input type="submit" class="flex flex-1 py-2 px-3 bg-teal-700 cursor-pointer text-center text-white w-full rounded-xl">
+    
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

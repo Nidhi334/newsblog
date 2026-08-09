@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block "content" %}
+
+<div class="flex flex-1">
+    <h3 class="text-black font-semibold text-3xl">{{title}}</h3>
+</div>
+<div class="flex flex-1 flex-col mt-4">
+    <div class=" flex-1 flex-col flex gap-2 p-4">
+        <div class="flex ">
+            <div class="flex-1 items-center">
+                <img class="object-contain w-full h-[100px]" src="{{ post.feature_image.url }}" alt="post Image">
+            </div>
+            <div class="flex-1">
+                <div class="flex flex-1 my-2">
+
+                    <h3 class=" font-semibold flex items-center text-gray-800 gap-4  text-red-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+                        </svg>
+                        {{post.topic.name}}
+                    </h3>
+                </div>
+
+                <div class="flex  flex-col justify-between gap-2 my-2">
+                    <span class="text-sm text-gray-800 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                        {{post.author}}</span>
+
+                    <div class="flex">
+                        <span class="text-sm text-gray-800  flex gap-2 items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+
+
+                            {{post.created_at}}</span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="flex">
+            <p class="text-gray-800 leading-loose text-xl">{{post.content}}</p>
+
+            </div>
+            <div class="flex flex-1 flex-col  overflow-y-scroll p-4" >
+                <h3 class="text-3xl font-semibold">Comments({{comments|length}})</h3>
+                {% for comment in comments %}
+                <div class="flex p-4 border my-2 border-slate-300 rounded-lg shadow">
+                    <div class="flex-1 ">
+                        <h3 class="text-xl my-2 font-semibold text-gray-800">{{comment.user_id}}</h3>
+                        <p class="text-sm my-2 text-gray-500">{{comment.comment}}</p>
+                        <p class="text-sm text-gray-500">{{comment.created_at}}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if request.user.is_authenticated %}
+                    <form method="POST" action="{% url 'saveComment' post.id %}" class="p-4">
+                        {% csrf_token %}
+                        <div class="flex">
+                            <textarea class="flex-1 p-2 border border-gray-300 rounded-lg" name="comment"
+                            placeholder="Write a comment..."></textarea>
+                            <button class="flex-[0.1] p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600">post</button>
+                        </div>
+                    </form>
+                    {% else %}
+                    <p class="text-center text-gray-500 p-5 bg-slate-200 gap-6 mt-10 rounded-lg border border-gray-300">
+                        Login Required befor post comment please
+                    <a href="{% url 'login' %}" class="text-blue-500 hover:underline font-semibold">Login</a>or <a href="{% url 'register' %}"class="text-blue-500 hover:underline font-semibold">Signup</a>
+                </p>
+                    {% endif %}
+                {% if not comment|length %}
+                <div class="bg-slate-100 px-3 py-2 rounded flex-1 h-48">
+                    <p class="text-center text-gray-500">No found any comment be th first</p>
+                    
+                </div>
+
+                {% endif %}
+            </div>
+            <div class="flex flex-1 my-5">
+                <h3 class="text-xl font-semibold border-b  border-slate-300 w-full">Related Post</h3>
+                
+            </div>
+            {% for post in relatedPost %}
+            <div class="flex p-4 border rounded-xl border-gray-300">
+                <div class="flex-1 items-center">
+                    <img class="object-contain w-full h-32" src="{{ post.feature_image.url }}" alt="post Image">
+                </div>
+                <div class="flex-[4]">
+                    <h3 class=" font-semibold text-gray-800 text-xl">{{post.title}}</h3>
+                    <h3 class=" font-semibold flex items-center text-gray-800 gap-4  text-red-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+                          </svg>
+                          {{post.topic.name}}</h3>
+                    <p class="text-gray-800 text-xl line-clamp-3">{{post.content}}</p>
+                    <div class="flex items-center justify-between my-2">
+                        <span class="text-sm text-gray-800 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                          </svg>
+                          {{post.author}}</span>
+                        <div class="flex">
+                            <span class="text-sm text-gray-800 ml-2 flex gap-2 items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                              </svg>
+                              
+                              
+                                {{post.created_at}}</span>
+                        </div>
+                        <div class="flex flex-1 justify-end ">
+                            <a href="{% url 'show' post.id%}" class="text-white px-4 py-2 bg-blue-600 hover:bg-red-900 rounded-xl">Read More</a>
+                        </div>
+        
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+   </div>
+</div>
+{% endblock %}

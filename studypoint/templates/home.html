@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block "content" %}
+
+<div class="flex flex-1">
+    <h3 class="text-black font-semibold text-3xl">{{title}}({{posts|length}})</h3>
+</div>
+<div class="flex flex-1 flex-col mt-4">
+    <div class=" flex-1 flex-col flex gap-2">
+        {% for post in posts %}
+        <div class="flex p-4 border shadow rounded-xl border-slate-200">
+            <div class="flex-1 items-center">
+                <img class="object-contain w-full h-32" src="{{ post.feature_image.url }}" alt="post Image">
+            </div>
+            <div class="flex-[4]">
+                <h3 class=" font-semibold text-gray-800 text-xl">{{post.title}}</h3>
+                <h3 class=" font-semibold flex items-center text-gray-800 gap-2  text-red-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+                      </svg>
+                      {{post.topic.name}}</h3>
+                <p class="text-gray-800 text-md text-justify line-clamp-3">{{post.content}}</p>
+                <div class="flex items-center justify-between my-2">
+                    <span class="text-sm text-gray-800 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      </svg>
+                      {{post.author}}</span>
+                    <div class="flex">
+                        <span class="text-sm text-gray-800 ml-2 flex gap-2 items-center ">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                          </svg>
+                          
+                          
+                            {{post.created_at}}</span>
+                    </div>
+                    <div class="flex flex-1 justify-end ">
+                        <a href="{% url 'show' post.id%}" class="text-white px-4 py-2 bg-gray-800 hover:bg-red-900 rounded-xl">Read More</a>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+       
+
+    </div>
+
+</div>
+
+{% endblock %}
